@@ -32,7 +32,7 @@ function setFondo(){
   function setData(latitud,Longitud){
 	$.ajax({
 		method:"GET",
-		url: "https://api.darksky.net/forecast/a7ce4bf352c37f9df06cf2b8f8e699fc/"+latitud+","+Longitud+"?units=auto",
+		url: "https://api.darksky.net/forecast/a7ce4bf352c37f9df06cf2b8f8e699fc/"+latitud+","+Longitud+"?units=ca",
 		dataType: "jsonp",
 		beforeSend: function(request) {
       		request.setRequestHeader("Access-Control-Allow-Origin", '*');
