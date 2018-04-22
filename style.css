@@ -29,8 +29,8 @@ body{
     
 }
 #buscame img{
-    width: 50px;
-    height: 50px;
+    width: 15%;
+    height: 15%;
     float: left;
 }
 
@@ -41,4 +41,25 @@ body{
     font-size: 2em;
     color: white;
     text-shadow: -1px 0 black, 0 1px black, 3px 0 black, 0 -1px black;
+    margin-top: 3%;
+}
+
+@media only screen and (max-device-width: 480px){
+
+    .info{
+        font-size: 5.5em;
+    }
+
+    #buscame{
+        width: 45%;
+    }
+    #buscame img{
+        width: 25%;
+        height: 25%;
+
+    }
+
+    #buscame p{
+        font-size: 4em;
+    }
 }
