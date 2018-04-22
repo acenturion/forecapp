@@ -1,17 +1,11 @@
-function unixTime(timeStamp)
-{
-	var date= new Date(timeStamp*1000);
-	var hours = date.getHours();
-	var minutes = "0" + date.getMinutes();
-	var seconds = "0" + date.getSeconds();
-	
-	return hours+ ':' + minutes.substr(-2) + ':' + seconds.substr(-2);  
-}
-
 function fixLocation(location){
+	console.log(location);
 	var resultado = location.split("/");
-	resultado = resultado[2].split("_");
-	return resultado[0] + " " +resultado[1] ;
+	var lugar = resultado.pop();
+	if(lugar.indexOf("_")){
+		lugar = lugar.replace(/[\W_]+/g," ");
+	}
+	return lugar;
 }
 
 function setFondo(){
@@ -35,18 +29,18 @@ function setFondo(){
    	$(".time").html(`<p><strong>${hour}:${mins}:${seconds}<p><strong>`);
   }
 
-  function setData(){
+  function setData(latitud,Longitud){
 	$.ajax({
 		method:"GET",
-		url: "https://api.darksky.net/forecast/a7ce4bf352c37f9df06cf2b8f8e699fc/-34.586976,-58.606536?units=auto",
+		url: "https://api.darksky.net/forecast/a7ce4bf352c37f9df06cf2b8f8e699fc/"+latitud+","+Longitud+"?units=auto",
 		dataType: "jsonp",
 		beforeSend: function(request) {
       		request.setRequestHeader("Access-Control-Allow-Origin", '*');
     	},
 		success: function(response){
-			$(".location").append("<p><strong>"+fixLocation(response.timezone)+"</strong></p>");
-			$(".temperatura").append("<p><strong>Temperatura: "+parseInt(response.currently.temperature)+"&#186;</strong></p>");
-			$(".humedad").append("<p><strong>Humedad: "+(response.currently.humidity*100)+"%</strong></p>");
+			$(".location").html("<p><strong>"+fixLocation(response.timezone)+"</strong></p>");
+			$(".temperatura").html("<p><strong>Temperatura: "+parseInt(response.currently.temperature)+"&#186;</strong></p>");
+			$(".humedad").html("<p><strong>Humedad: "+(response.currently.humidity*100)+"%</strong></p>");
 		}
 	});
   }
@@ -60,7 +54,6 @@ function setFondo(){
 		pressed.push(e.key);
 		pressed.splice(-secretCode.length - 1, pressed.length -secretCode.length);
 
-		console.log(pressed);
 
 		if(pressed.join("").includes(secretCode)){
 			cornify_add();
@@ -68,9 +61,24 @@ function setFondo(){
 	});
 
   }
-  
+
+  function setGeolocation(){
+  	if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+    } else { 
+       	alert("Geolocation is not supported by this browser.");
+    }
+}
+
+function showPosition(position) {
+    console.log("Latitude: " + position.coords.latitude + " Longitude: " + position.coords.longitude );
+    setData(position.coords.latitude, position.coords.longitude);
+
+  }
+ 
+
   setFondo();
-  setData();
+  setData("40.586976", "-74.606536");
   setDate();
   secretCode();
 
