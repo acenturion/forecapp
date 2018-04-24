@@ -1,3 +1,5 @@
+var cords = JSON.parse(localStorage.getItem("cords")) ||{"latitude":40.586976,"longitude":-74.606536};
+
 function fixLocation(location){
 	console.log(location);
 	var resultado = location.split("/");
@@ -40,7 +42,7 @@ function setFondo(){
 		success: function(response){
 			$(".location").html("<p><strong>"+fixLocation(response.timezone)+"</strong></p>");
 			$(".temperatura").html("<p><strong>Temperatura: "+parseInt(response.currently.temperature)+"&#186;</strong></p>");
-			$(".humedad").html("<p><strong>Humedad: "+(response.currently.humidity*100)+"%</strong></p>");
+			$(".humedad").html("<p><strong>Humedad: "+(parseInt(response.currently.humidity*100))+"%</strong></p>");
 		}
 	});
   }
@@ -72,18 +74,27 @@ function setFondo(){
 
 function showPosition(position) {
     console.log("Latitude: " + position.coords.latitude + " Longitude: " + position.coords.longitude );
+    setLocalCords(position.coords.latitude, position.coords.longitude);
     setData(position.coords.latitude, position.coords.longitude);
 
   }
- 
+ function setLocalCords(latitude,longitude){
+ 	const item ={
+ 		latitude,
+ 		longitude
+ 	}
+ 	//cords.push(item);
+ 	localStorage.setItem('cords', JSON.stringify(item));
+ }
 
-  setFondo();
-  setData("40.586976", "-74.606536");
-  setDate();
-  secretCode();
 
 $(document).ready(function(){
 
-	setInterval(setDate, 1000);
+  setFondo();
+  setData(cords.latitude,cords.longitude);
+  //setData("40.586976", "-74.606536");
+  setDate();
+  secretCode();
+  setInterval(setDate, 1000);
 
 });
